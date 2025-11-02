@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Админка - Строительный магазин{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Панель администратора</h2>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Пользователи</h5>
+                <h2 class="card-text">{{ user_count }}</h2>
+                <a href="/admin/users" class="btn btn-light">Управление</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Товары</h5>
+                <h2 class="card-text">{{ product_count }}</h2>
+                <a href="/products/" class="btn btn-light">Просмотр</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Новые отзывы</h5>
+                <h2 class="card-text">{{ unread_feedback }}</h2>
+                <a href="/admin/feedback" class="btn btn-light">Просмотр</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Быстрые действия</h5>
+            </div>
+            <div class="card-body">
+                <a href="/admin/users" class="btn btn-outline-primary me-2">Управление пользователями</a>
+                <a href="/admin/feedback" class="btn btn-outline-primary me-2">Просмотр отзывов</a>
+                <a href="/products/" class="btn btn-outline-success me-2">Просмотр товаров</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

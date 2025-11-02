@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section bg-light py-5 mb-5">
+    <div class="container text-center">
+        <h1 class="display-4">Добро пожаловать в СтройМаг</h1>
+        <p class="lead">Лучшие строительные материалы и инструменты</p>
+        <a href="/products/" class="btn btn-primary btn-lg">Смотреть товары</a>
+        {% if request.cookies.get('access_token') and cart_count > 0 %}
+        <a href="/cart/" class="btn btn-success btn-lg ms-2">
+            Корзина <span class="badge bg-white text-success">{{ cart_count }}</span>
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-12">
+        <h2>Популярные категории</h2>
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-2 mb-3">
+                <a href="/products/?category={{ category }}" class="btn btn-outline-primary w-100">
+                    {{ category }}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <h2>Рекомендуемые товары</h2>
+    {% for product in featured_products %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <img src="{{ product.image_url or '/static/images/placeholder.jpg' }}" 
+                 class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">{{ product.description[:100] }}...</p>
+                <p class="card-text"><strong>{{ product.price }} руб.</strong></p>
+                <a href="/products/{{ product.id }}" class="btn btn-primary">Подробнее</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

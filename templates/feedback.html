@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Обратная связь - Строительный магазин{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2>Обратная связь</h2>
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Тема сообщения</label>
+                        <input type="text" class="form-control" id="subject" name="subject" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Сообщение</label>
+                        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    {% if not request.cookies.get('access_token') %}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Ваш Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary">Отправить сообщение</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <h4>Контактная информация</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Телефон:</strong> +7 (999) 123-45-67</p>
+                    <p><strong>Email:</strong> info@stroymag.ru</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Адрес:</strong> г. Москва, ул. Строителей, д. 15</p>
+                    <p><strong>Время работы:</strong> Пн-Пт: 9:00-20:00, Сб-Вс: 10:00-18:00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

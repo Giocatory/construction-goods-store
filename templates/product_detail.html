@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - Строительный магазин{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <img src="{{ product.image_url or '/static/images/placeholder.jpg' }}" 
+             class="img-fluid rounded" alt="{{ product.name }}" 
+             style="max-height: 400px; width: 100%; object-fit: cover;">
+    </div>
+    <div class="col-md-6">
+        <h2>{{ product.name }}</h2>
+        <p class="text-muted">Категория: {{ product.category }}</p>
+        
+        <div class="mb-3">
+            <span class="h4 text-primary">{{ product.price }} руб.</span>
+            {% if product.stock_quantity > 0 %}
+                <span class="badge bg-success ms-2">В наличии</span>
+            {% else %}
+                <span class="badge bg-danger ms-2">Нет в наличии</span>
+            {% endif %}
+        </div>
+        
+        <p class="mb-4">{{ product.description }}</p>
+        
+        <div class="mb-3">
+            <strong>Количество на складе:</strong> {{ product.stock_quantity }} шт.
+        </div>
+        
+        {% if product.stock_quantity > 0 and request.cookies.get('access_token') %}
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="quantity" class="form-label">Количество:</label>
+                <select class="form-select" id="quantity" name="quantity">
+                    {% set max_quantity = product.stock_quantity if product.stock_quantity < 10 else 10 %}
+                    {% for i in range(1, max_quantity + 1) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <form method="post" action="/cart/add/{{ product.id }}">
+            <input type="hidden" name="quantity" id="quantity-input" value="1">
+            <button type="submit" class="btn btn-primary btn-lg add-to-cart">Добавить в корзину</button>
+        </form>
+        {% elif not request.cookies.get('access_token') %}
+        <div class="alert alert-info">
+            <a href="/users/login" class="alert-link">Войдите</a>, чтобы добавлять товары в корзину
+        </div>
+        {% else %}
+        <button class="btn btn-secondary btn-lg" disabled>Нет в наличии</button>
+        {% endif %}
+        
+        <div class="mt-4">
+            <h5>Характеристики</h5>
+            <ul class="list-unstyled">
+                <li><strong>Категория:</strong> {{ product.category }}</li>
+                <li><strong>Артикул:</strong> #{{ product.id }}</li>
+                <li><strong>Добавлен:</strong> {{ product.created_at[:10] }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <h4>Похожие товары</h4>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <p class="text-muted">Похожие товары появятся здесь</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quantitySelect = document.getElementById('quantity');
+    const quantityInput = document.getElementById('quantity-input');
+    
+    if (quantitySelect && quantityInput) {
+        quantitySelect.addEventListener('change', function() {
+            quantityInput.value = this.value;
+        });
+    }
+});
+</script>
+{% endblock %}

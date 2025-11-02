@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Профиль - Строительный магазин{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Профиль пользователя</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>Полное имя:</strong> {{ user.full_name or 'Не указано' }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Статус:</strong> 
+                            {% if user.is_active %}
+                                <span class="badge bg-success">Активен</span>
+                            {% else %}
+                                <span class="badge bg-danger">Неактивен</span>
+                            {% endif %}
+                        </p>
+                        <p><strong>Роль:</strong> 
+                            {% if user.is_superuser %}
+                                <span class="badge bg-primary">Администратор</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Пользователь</span>
+                            {% endif %}
+                        </p>
+                        <p><strong>Дата регистрации:</strong> {{ user.created_at[:10] }}</p>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="/" class="btn btn-primary">На главную</a>
+                    {% if user.is_superuser %}
+                    <a href="/admin/" class="btn btn-warning">Панель администратора</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

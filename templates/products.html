@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Товары - Строительный магазин{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5>Фильтры</h5>
+            </div>
+            <div class="card-body">
+                <h6>Категории</h6>
+                <div class="list-group">
+                    <a href="/products/" 
+                       class="list-group-item list-group-item-action {% if not selected_category %}active{% endif %}">
+                        Все категории
+                    </a>
+                    {% for category in categories %}
+                    <a href="/products/?category={{ category }}" 
+                       class="list-group-item list-group-item-action {% if selected_category == category %}active{% endif %}">
+                        {{ category }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <h2>Каталог товаров</h2>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <img src="{{ product.image_url or '/static/images/placeholder.jpg' }}" 
+                         class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description[:150] }}...</p>
+                        <p class="card-text">
+                            <strong>{{ product.price }} руб.</strong><br>
+                            <small class="text-muted">В наличии: {{ product.stock_quantity }} шт.</small>
+                        </p>
+                        <a href="/products/{{ product.id }}" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

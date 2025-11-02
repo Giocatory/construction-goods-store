@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Отзывы - Админка{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Управление отзывами</h2>
+    <div class="btn-group">
+        <a href="/admin/" class="btn btn-outline-primary">Назад в админку</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Сообщения обратной связи</h5>
+    </div>
+    <div class="card-body">
+        {% if feedback_messages %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Пользователь</th>
+                        <th>Email</th>
+                        <th>Тема</th>
+                        <th>Сообщение</th>
+                        <th>Дата</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for feedback in feedback_messages %}
+                    <tr class="{% if not feedback.is_read %}table-warning{% endif %}">
+                        <td>{{ feedback.id }}</td>
+                        <td>
+                            {% if feedback.username %}
+                                {{ feedback.username }}
+                            {% else %}
+                                <span class="text-muted">Гость</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ feedback.email }}</td>
+                        <td>{{ feedback.subject }}</td>
+                        <td>
+                            <span class="d-inline-block text-truncate" style="max-width: 200px;">
+                                {{ feedback.message }}
+                            </span>
+                        </td>
+                        <td>{{ feedback.created_at[:16] }}</td>
+                        <td>
+                            {% if feedback.is_read %}
+                                <span class="badge bg-success">Прочитано</span>
+                            {% else %}
+                                <span class="badge bg-warning">Новое</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not feedback.is_read %}
+                            <form action="/admin/feedback/{{ feedback.id }}/mark-read" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-success">Отметить прочитанным</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <p class="text-muted">Сообщений пока нет</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

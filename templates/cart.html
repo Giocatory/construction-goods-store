@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Корзина - Строительный магазин{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Корзина покупок</h2>
+        
+        {% if message %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+        
+        {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+        
+        {% if cart_items %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Цена</th>
+                        <th>Количество</th>
+                        <th>Сумма</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="{{ item.image_url or '/static/images/placeholder.jpg' }}" 
+                                     alt="{{ item.name }}" 
+                                     style="width: 50px; height: 50px; object-fit: cover;" 
+                                     class="me-3">
+                                <div>
+                                    <h6 class="mb-0">{{ item.name }}</h6>
+                                    <small class="text-muted">Артикул: #{{ item.product_id }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ item.price }} руб.</td>
+                        <td>
+                            <form method="post" action="/cart/update/{{ item.product_id }}" class="d-flex align-items-center">
+                                <input type="number" name="quantity" value="{{ item.quantity }}" 
+                                       min="1" max="{{ item.stock_quantity }}" class="form-control form-control-sm" style="width: 80px;">
+                                <button type="submit" class="btn btn-sm btn-outline-primary ms-2">Обновить</button>
+                            </form>
+                        </td>
+                        <td>{{ item.price * item.quantity }} руб.</td>
+                        <td>
+                            <form method="post" action="/cart/remove/{{ item.product_id }}" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end"><strong>Итого:</strong></td>
+                        <td><strong>{{ total }} руб.</strong></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <div class="d-flex justify-content-between mt-4">
+            <form method="post" action="/cart/clear">
+                <button type="submit" class="btn btn-secondary">Очистить корзину</button>
+            </form>
+            
+            <form method="post" action="/cart/checkout">
+                <button type="submit" class="btn btn-success btn-lg">Купить сейчас</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <h4 class="text-muted">Ваша корзина пуста</h4>
+            <p class="text-muted">Добавьте товары из каталога, чтобы сделать покупку</p>
+            <a href="/products/" class="btn btn-primary">Перейти к товарам</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
